@@ -1328,3 +1328,101 @@ body {
   color: var(--gold);
   background: rgba(212,168,76,0.07);
 }
+
+/* ══════════════════════════════════════
+   MOBILE BOTTOM NAV
+   (hidden on desktop, shown on mobile)
+══════════════════════════════════════ */
+.mobile-nav { display: none; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE — mobile (≤768px)
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── Layout ── */
+  .sidebar    { display: none; }
+  .main       { margin-left: 0; padding-bottom: 68px; }
+  .topbar     { padding: 0 16px; min-height: 58px; }
+  .page-title { font-size: 21px; }
+  .content    { padding: 14px 14px; }
+
+  /* ── Grids ── */
+  .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+
+  /* ── Modals — slide up as bottom sheets ── */
+  .modal-overlay { align-items: flex-end; }
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .event-detail-wrap {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+  }
+
+  /* ── Calendar ── */
+  .cal-page               { flex-direction: column; height: auto; }
+  .cal-main .card-lg      { flex: none; }
+  .cal-grid-fill          { min-height: 280px; }
+  .day-panel              { width: 100%; }
+
+  /* ── Profile menu ── */
+  .profile-menu { left: 8px; right: 8px; width: auto; bottom: 68px; }
+
+  /* ── Tab row — scrollable ── */
+  .tab-row { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ── Miscellaneous ── */
+  .section-title-row { flex-wrap: wrap; gap: 8px; }
+  .dual-progress     { grid-template-columns: 1fr; }
+  .habits-grid       { grid-template-columns: 1fr; }
+  .people-grid       { grid-template-columns: 1fr; }
+  .briefing-grid     { grid-template-columns: 1fr; }
+  .notes-grid        { grid-template-columns: 1fr; }
+  .week-strip        { gap: 4px; }
+  .week-day          { padding: 8px 4px; }
+  .week-day-num      { font-size: 15px; }
+
+  /* ── Mobile bottom nav ── */
+  .mobile-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--navy2);
+    border-top: 1px solid var(--border);
+    z-index: 50;
+    padding: 0 4px;
+    padding-bottom: env(safe-area-inset-bottom);
+    align-items: stretch;
+  }
+  .mobile-nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text3);
+    padding: 4px 2px;
+    border-radius: 8px;
+    transition: color .12s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .mobile-nav-btn.active    { color: var(--gold); }
+  .mobile-nav-btn:hover     { color: var(--text1); }
+  .mobile-nav-icon          { font-size: 18px; line-height: 1; }
+  .mobile-nav-label         { font-size: 9px; letter-spacing: .3px; text-transform: uppercase; }
+}

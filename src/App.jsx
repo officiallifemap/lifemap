@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import AuthGate from './components/auth/AuthGate'
 import Sidebar from './components/layout/Sidebar'
 import Topbar from './components/layout/Topbar'
 import Dashboard from './components/dashboard/Dashboard'
@@ -43,23 +44,25 @@ export default function App() {
   }, [darkMode])
 
   return (
-    <div className="app">
-      <Sidebar />
-      <main className="main">
-        <Topbar />
-        <div className="content">
-          <Section />
-        </div>
-      </main>
+    <AuthGate>
+      <div className="app">
+        <Sidebar />
+        <main className="main">
+          <Topbar />
+          <div className="content">
+            <Section />
+          </div>
+        </main>
 
-      {/* Modals */}
-      <QuickAddModal />
-      <EventModal />
-      <TodoModal />
-      <GoalModal />
-      <IncomeModal />
-      <BudgetModal />
-      <ContributionModal />
-    </div>
+        {/* Modals */}
+        <QuickAddModal />
+        <EventModal />
+        <TodoModal />
+        <GoalModal />
+        <IncomeModal />
+        <BudgetModal />
+        <ContributionModal />
+      </div>
+    </AuthGate>
   )
 }

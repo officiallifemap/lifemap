@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
+import { signOut, signInWithPopup } from 'firebase/auth'
+import { auth, googleProvider } from '../../firebase'
 import useStore from '../../store/useStore'
 import CropModal from '../ui/CropModal'
 import FeedbackModal from '../modals/FeedbackModal'
@@ -277,6 +279,7 @@ export default function Sidebar() {
   const firstStepsDismissed = useStore((s) => s.firstStepsDismissed)
   const [confirmDelProfile, setConfirmDelProfile] = useState(null)
 
+  const currentUser      = useStore((s) => s.currentUser)
   const activeProfile    = profiles.find((p) => p.id === activeProfileId) ?? profiles[0] ?? { id: 'default', name: 'My Profile', color: '#d4a84c' }
 
   const [dragId,        setDragId]        = useState(null)
@@ -439,6 +442,26 @@ export default function Sidebar() {
         </div>
       </aside>
 
+      {/* ── Mobile bottom navigation ── */}
+      <nav className="mobile-nav">
+        {orderedItems.slice(0, 5).map((item) => (
+          <button
+            key={item.id}
+            className={`mobile-nav-btn${currentPage === item.id ? ' active' : ''}`}
+            onClick={() => setPage(item.id)}
+          >
+            <span className="mobile-nav-icon">{item.icon}</span>
+            <span className="mobile-nav-label">{item.label}</span>
+          </button>
+        ))}
+        <button className="mobile-nav-btn" onClick={() => setShowMenu((v) => !v)}>
+          <span className="mobile-nav-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ProfileAvatar profile={activeProfile} size={22} fontSize={9} />
+          </span>
+          <span className="mobile-nav-label">Profile</span>
+        </button>
+      </nav>
+
       {/* ── Profile popup menu ── */}
       {showMenu && (
         <div className="profile-menu" ref={menuRef}>
@@ -497,11 +520,36 @@ export default function Sidebar() {
           {/* Account */}
           <div className="profile-menu-section" style={{ paddingBottom: 6 }}>
             <div className="profile-menu-label">Account</div>
-            <button className="profile-menu-item" style={{ color: 'var(--text3)' }} onClick={() => {}}>
-              <span style={{ fontSize: 14 }}>🔑</span>
-              Sign In / Sign Up
-              <span style={{ fontSize: 10, color: 'var(--text3)', marginLeft: 'auto' }}>soon</span>
-            </button>
+
+            {currentUser ? (
+              <>
+                {/* Signed-in user row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px' }}>
+                  {currentUser.photoURL
+                    ? <img src={currentUser.photoURL} alt="" style={{ width: 28, height: 28, borderRadius: '50%', flexShrink: 0 }} />
+                    : <span style={{ fontSize: 14 }}>👤</span>
+                  }
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, color: 'var(--text1)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentUser.displayName}</div>
+                    <div style={{ fontSize: 11, color: 'var(--text3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentUser.email}</div>
+                  </div>
+                  <span style={{ fontSize: 10, color: 'var(--sage2)', fontWeight: 600, flexShrink: 0 }}>✓ Synced</span>
+                </div>
+                <button className="profile-menu-item danger" onClick={() => { signOut(auth); setShowMenu(false) }}>
+                  <span style={{ fontSize: 14 }}>↩</span>
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <button
+                className="profile-menu-item"
+                onClick={async () => { try { await signInWithPopup(auth, googleProvider) } catch {} setShowMenu(false) }}
+              >
+                <span style={{ fontSize: 14 }}>🔑</span>
+                Sign in with Google
+              </button>
+            )}
+
             <button className="profile-menu-item" onClick={() => { setShowFeedback(true); setShowMenu(false) }}>
               <span style={{ fontSize: 14 }}>📬</span>
               Contact / Feedback
