@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { signOut, signInWithPopup } from 'firebase/auth'
-import { auth, googleProvider, yahooProvider } from '../../firebase'
+import { signOut } from 'firebase/auth'
+import { auth } from '../../firebase'
 import useStore from '../../store/useStore'
 import CropModal from '../ui/CropModal'
 import FeedbackModal from '../modals/FeedbackModal'
@@ -42,6 +42,15 @@ function ProfileAvatar({ profile, size = 34, fontSize = 13 }) {
         : initials(profile.name)
       }
     </div>
+  )
+}
+
+/* Fixed-width icon wrapper so all menu items align */
+function Icon({ children }) {
+  return (
+    <span style={{ width: 20, textAlign: 'center', flexShrink: 0, fontSize: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+      {children}
+    </span>
   )
 }
 
@@ -280,6 +289,7 @@ export default function Sidebar() {
   const [confirmDelProfile, setConfirmDelProfile] = useState(null)
 
   const currentUser      = useStore((s) => s.currentUser)
+  const openAuthScreen   = useStore((s) => s.openAuthScreen)
   const activeProfile    = profiles.find((p) => p.id === activeProfileId) ?? profiles[0] ?? { id: 'default', name: 'My Profile', color: '#d4a84c' }
 
   const [dragId,        setDragId]        = useState(null)
@@ -527,40 +537,28 @@ export default function Sidebar() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 16px' }}>
                   {currentUser.photoURL
                     ? <img src={currentUser.photoURL} alt="" style={{ width: 28, height: 28, borderRadius: '50%', flexShrink: 0 }} />
-                    : <span style={{ fontSize: 14 }}>👤</span>
+                    : <Icon>👤</Icon>
                   }
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, color: 'var(--text1)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentUser.displayName}</div>
+                    <div style={{ fontSize: 13, color: 'var(--text1)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentUser.displayName || currentUser.email}</div>
                     <div style={{ fontSize: 11, color: 'var(--text3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentUser.email}</div>
                   </div>
                   <span style={{ fontSize: 10, color: 'var(--sage2)', fontWeight: 600, flexShrink: 0 }}>✓ Synced</span>
                 </div>
                 <button className="profile-menu-item danger" onClick={() => { signOut(auth); setShowMenu(false) }}>
-                  <span style={{ fontSize: 14 }}>↩</span>
+                  <Icon>↩</Icon>
                   Sign Out
                 </button>
               </>
             ) : (
-              <>
-                <button
-                  className="profile-menu-item"
-                  onClick={async () => { try { await signInWithPopup(auth, googleProvider) } catch {} setShowMenu(false) }}
-                >
-                  <span style={{ fontSize: 14 }}>G</span>
-                  Sign in with Google
-                </button>
-                <button
-                  className="profile-menu-item"
-                  onClick={async () => { try { await signInWithPopup(auth, yahooProvider) } catch {} setShowMenu(false) }}
-                >
-                  <span style={{ fontSize: 14 }}>Y!</span>
-                  Sign in with Yahoo
-                </button>
-              </>
+              <button className="profile-menu-item" onClick={() => { openAuthScreen(); setShowMenu(false) }}>
+                <Icon>🔑</Icon>
+                Sign up / Log in
+              </button>
             )}
 
             <button className="profile-menu-item" onClick={() => { setShowFeedback(true); setShowMenu(false) }}>
-              <span style={{ fontSize: 14 }}>📬</span>
+              <Icon>📬</Icon>
               Contact / Feedback
             </button>
             <a
@@ -568,9 +566,9 @@ export default function Sidebar() {
               target="_blank"
               rel="noopener noreferrer"
               className="profile-menu-item"
-              style={{ textDecoration: 'none', color: 'var(--text2)' }}
+              style={{ textDecoration: 'none', color: 'var(--text1)' }}
             >
-              <span style={{ fontSize: 14 }}>☕</span>
+              <Icon>☕</Icon>
               Support on Ko-fi
             </a>
           </div>

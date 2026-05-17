@@ -150,8 +150,11 @@ const useStore = create(
       debts:            initialDebts,
 
       /* ── Auth ── */
-      currentUser: null,
-      setCurrentUser: (user) => set({ currentUser: user }),
+      currentUser:     null,
+      authScreenOpen:  false,
+      setCurrentUser:  (user) => set({ currentUser: user }),
+      openAuthScreen:  ()     => set({ authScreenOpen: true }),
+      closeAuthScreen: ()     => set({ authScreenOpen: false }),
 
       /* ── Navigation actions ── */
       setPage:        (page)           => set({ currentPage: page }),
@@ -686,7 +689,7 @@ const useStore = create(
       name: 'lifemap-store',
       version: 15,
       partialize: (s) => {
-        const { activeModal, modalData, focusItem, financesTab, currentUser, setCurrentUser, ...rest } = s
+        const { activeModal, modalData, focusItem, financesTab, currentUser, setCurrentUser, authScreenOpen, openAuthScreen, closeAuthScreen, ...rest } = s
         return rest
       },
       migrate: (state, version) => {

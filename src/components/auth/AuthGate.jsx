@@ -69,7 +69,9 @@ async function loadOrUpload(uid) {
 export default function AuthGate({ children }) {
   const [user,    setUser]    = useState(undefined)
   const [skipped, setSkipped] = useState(() => !!localStorage.getItem(SKIP_KEY))
-  const unsubSyncRef = useRef(null)
+  const unsubSyncRef   = useRef(null)
+  const authScreenOpen = useStore((s) => s.authScreenOpen)
+  const closeAuthScreen = useStore((s) => s.closeAuthScreen)
 
   useEffect(() => {
     const unsubAuth = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -121,7 +123,17 @@ export default function AuthGate({ children }) {
     return <SignInScreen onSkip={() => { localStorage.setItem(SKIP_KEY, '1'); setSkipped(true) }} />
   }
 
-  return children
+  return (
+    <>
+      {children}
+      {/* Auth screen overlay — triggered from sidebar when already skipped */}
+      {authScreenOpen && !user && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 999, overflowY: 'auto' }}>
+          <SignInScreen onSkip={closeAuthScreen} />
+        </div>
+      )}
+    </>
+  )
 }
 
 /* ══════════════════════════════════════════
