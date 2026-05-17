@@ -78,6 +78,7 @@ export default function AuthGate({ children }) {
       if (unsubSyncRef.current) { unsubSyncRef.current(); unsubSyncRef.current = null }
 
       if (firebaseUser) {
+        useStore.getState().closeAuthScreen()
         try { await loadOrUpload(firebaseUser.uid) } catch (e) { console.error('Firestore:', e) }
 
         useStore.setState({
@@ -136,6 +137,74 @@ export default function AuthGate({ children }) {
   )
 }
 
+/* Countries Firebase supports for SMS — flag · name · dial code */
+const COUNTRIES = [
+  { flag: '🇺🇸', name: 'United States',        code: '+1'   },
+  { flag: '🇨🇦', name: 'Canada',               code: '+1'   },
+  { flag: '🇬🇧', name: 'United Kingdom',        code: '+44'  },
+  { flag: '🇦🇺', name: 'Australia',             code: '+61'  },
+  { flag: '🇳🇿', name: 'New Zealand',           code: '+64'  },
+  { flag: '🇮🇪', name: 'Ireland',               code: '+353' },
+  { flag: '🇩🇪', name: 'Germany',               code: '+49'  },
+  { flag: '🇫🇷', name: 'France',                code: '+33'  },
+  { flag: '🇪🇸', name: 'Spain',                 code: '+34'  },
+  { flag: '🇮🇹', name: 'Italy',                 code: '+39'  },
+  { flag: '🇵🇹', name: 'Portugal',              code: '+351' },
+  { flag: '🇳🇱', name: 'Netherlands',           code: '+31'  },
+  { flag: '🇧🇪', name: 'Belgium',               code: '+32'  },
+  { flag: '🇨🇭', name: 'Switzerland',           code: '+41'  },
+  { flag: '🇦🇹', name: 'Austria',               code: '+43'  },
+  { flag: '🇸🇪', name: 'Sweden',                code: '+46'  },
+  { flag: '🇳🇴', name: 'Norway',                code: '+47'  },
+  { flag: '🇩🇰', name: 'Denmark',               code: '+45'  },
+  { flag: '🇫🇮', name: 'Finland',               code: '+358' },
+  { flag: '🇵🇱', name: 'Poland',                code: '+48'  },
+  { flag: '🇨🇿', name: 'Czech Republic',        code: '+420' },
+  { flag: '🇷🇴', name: 'Romania',               code: '+40'  },
+  { flag: '🇭🇺', name: 'Hungary',               code: '+36'  },
+  { flag: '🇬🇷', name: 'Greece',                code: '+30'  },
+  { flag: '🇺🇦', name: 'Ukraine',               code: '+380' },
+  { flag: '🇮🇳', name: 'India',                 code: '+91'  },
+  { flag: '🇯🇵', name: 'Japan',                 code: '+81'  },
+  { flag: '🇰🇷', name: 'South Korea',           code: '+82'  },
+  { flag: '🇨🇳', name: 'China',                 code: '+86'  },
+  { flag: '🇸🇬', name: 'Singapore',             code: '+65'  },
+  { flag: '🇭🇰', name: 'Hong Kong',             code: '+852' },
+  { flag: '🇹🇼', name: 'Taiwan',                code: '+886' },
+  { flag: '🇲🇾', name: 'Malaysia',              code: '+60'  },
+  { flag: '🇵🇭', name: 'Philippines',           code: '+63'  },
+  { flag: '🇮🇩', name: 'Indonesia',             code: '+62'  },
+  { flag: '🇹🇭', name: 'Thailand',              code: '+66'  },
+  { flag: '🇻🇳', name: 'Vietnam',               code: '+84'  },
+  { flag: '🇧🇩', name: 'Bangladesh',            code: '+880' },
+  { flag: '🇵🇰', name: 'Pakistan',              code: '+92'  },
+  { flag: '🇱🇰', name: 'Sri Lanka',             code: '+94'  },
+  { flag: '🇳🇵', name: 'Nepal',                 code: '+977' },
+  { flag: '🇮🇱', name: 'Israel',                code: '+972' },
+  { flag: '🇸🇦', name: 'Saudi Arabia',          code: '+966' },
+  { flag: '🇦🇪', name: 'United Arab Emirates',  code: '+971' },
+  { flag: '🇶🇦', name: 'Qatar',                 code: '+974' },
+  { flag: '🇰🇼', name: 'Kuwait',                code: '+965' },
+  { flag: '🇧🇭', name: 'Bahrain',               code: '+973' },
+  { flag: '🇴🇲', name: 'Oman',                  code: '+968' },
+  { flag: '🇯🇴', name: 'Jordan',                code: '+962' },
+  { flag: '🇱🇧', name: 'Lebanon',               code: '+961' },
+  { flag: '🇹🇷', name: 'Turkey',                code: '+90'  },
+  { flag: '🇿🇦', name: 'South Africa',          code: '+27'  },
+  { flag: '🇳🇬', name: 'Nigeria',               code: '+234' },
+  { flag: '🇰🇪', name: 'Kenya',                 code: '+254' },
+  { flag: '🇬🇭', name: 'Ghana',                 code: '+233' },
+  { flag: '🇪🇬', name: 'Egypt',                 code: '+20'  },
+  { flag: '🇲🇦', name: 'Morocco',               code: '+212' },
+  { flag: '🇧🇷', name: 'Brazil',                code: '+55'  },
+  { flag: '🇲🇽', name: 'Mexico',                code: '+52'  },
+  { flag: '🇦🇷', name: 'Argentina',             code: '+54'  },
+  { flag: '🇨🇱', name: 'Chile',                 code: '+56'  },
+  { flag: '🇨🇴', name: 'Colombia',              code: '+57'  },
+  { flag: '🇵🇪', name: 'Peru',                  code: '+51'  },
+  { flag: '🇻🇪', name: 'Venezuela',             code: '+58'  },
+]
+
 /* ══════════════════════════════════════════
    Sign-in screen — all providers
 ══════════════════════════════════════════ */
@@ -145,6 +214,7 @@ function SignInScreen({ onSkip }) {
   const [email,     setEmail]     = useState('')
   const [password,  setPassword]  = useState('')
   const [confirm,   setConfirm]   = useState('')
+  const [dialCode,  setDialCode]  = useState('+1')
   const [phone,     setPhone]     = useState('')
   const [code,      setCode]      = useState('')
   const [loading,   setLoading]   = useState(false)
@@ -196,13 +266,15 @@ function SignInScreen({ onSkip }) {
     }
   }
 
+  const fullPhone = dialCode + phone.replace(/\D/g, '')
+
   const sendCode = async (e) => {
     e.preventDefault()
     if (!phone.trim()) return
     setLoading(true); setError('')
     initRecaptcha()
     try {
-      confirmResult.current = await signInWithPhoneNumber(auth, phone, recaptchaRef.current)
+      confirmResult.current = await signInWithPhoneNumber(auth, fullPhone, recaptchaRef.current)
       go('code')
     } catch (e) { err(e) }
     setLoading(false)
@@ -360,10 +432,43 @@ function SignInScreen({ onSkip }) {
       <BackBtn onClick={() => go('choose')} />
       <div style={{ fontSize: 18, color: 'var(--cream)', fontWeight: 600, marginBottom: 8 }}>Sign in with phone</div>
       <div style={{ fontSize: 13, color: 'var(--text3)', marginBottom: 20, lineHeight: 1.6 }}>
-        We'll text you a verification code. Include your country code (e.g. +1 555 000 0000).
+        We'll text you a verification code.
       </div>
       <form onSubmit={sendCode} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <input className="input" type="tel" placeholder="+1 555 000 0000" value={phone} onChange={(e) => setPhone(e.target.value)} required autoFocus />
+        <div style={{ display: 'flex', gap: 8 }}>
+          <select
+            value={dialCode}
+            onChange={(e) => setDialCode(e.target.value)}
+            style={{
+              background: 'var(--navy4)', border: '1px solid var(--border2)',
+              borderRadius: 10, color: 'var(--text1)',
+              fontSize: 13, padding: '0 10px',
+              fontFamily: 'DM Sans, sans-serif',
+              cursor: 'pointer', flexShrink: 0,
+              appearance: 'none', WebkitAppearance: 'none',
+              minWidth: 90,
+            }}
+          >
+            {COUNTRIES.map((c, i) => (
+              <option key={i} value={c.code}>
+                {c.flag} {c.code} {c.name}
+              </option>
+            ))}
+          </select>
+          <input
+            className="input"
+            type="tel"
+            placeholder="Phone number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+            autoFocus
+            style={{ flex: 1 }}
+          />
+        </div>
+        <div style={{ fontSize: 11, color: 'var(--text3)' }}>
+          Full number: {fullPhone || '—'}
+        </div>
         {error && <div style={{ fontSize: 12, color: 'var(--coral2)' }}>{error}</div>}
         <button className="btn btn-primary" type="submit" disabled={loading} style={{ width: '100%', padding: '11px 0', fontSize: 14 }}>
           {loading ? 'Sending…' : 'Send Code'}
@@ -377,7 +482,7 @@ function SignInScreen({ onSkip }) {
       <BackBtn onClick={() => go('phone')} />
       <div style={{ fontSize: 18, color: 'var(--cream)', fontWeight: 600, marginBottom: 8 }}>Enter the code</div>
       <div style={{ fontSize: 13, color: 'var(--text3)', marginBottom: 20, lineHeight: 1.6 }}>
-        We sent a 6-digit code to {phone}.
+        We sent a 6-digit code to {fullPhone}.
       </div>
       <form onSubmit={verifyCode} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <input

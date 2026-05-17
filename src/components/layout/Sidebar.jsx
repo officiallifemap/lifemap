@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { signOut } from 'firebase/auth'
+import { signOut, onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../../firebase'
 import useStore from '../../store/useStore'
 import CropModal from '../ui/CropModal'
@@ -288,8 +288,12 @@ export default function Sidebar() {
   const firstStepsDismissed = useStore((s) => s.firstStepsDismissed)
   const [confirmDelProfile, setConfirmDelProfile] = useState(null)
 
-  const currentUser      = useStore((s) => s.currentUser)
   const openAuthScreen   = useStore((s) => s.openAuthScreen)
+  const [currentUser, setCurrentUser] = useState(auth.currentUser)
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, setCurrentUser)
+  }, [])
   const activeProfile    = profiles.find((p) => p.id === activeProfileId) ?? profiles[0] ?? { id: 'default', name: 'My Profile', color: '#d4a84c' }
 
   const [dragId,        setDragId]        = useState(null)
