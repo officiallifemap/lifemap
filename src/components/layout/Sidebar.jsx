@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { signOut, signInWithPopup } from 'firebase/auth'
-import { auth, googleProvider } from '../../firebase'
+import { auth, googleProvider, yahooProvider } from '../../firebase'
 import useStore from '../../store/useStore'
 import CropModal from '../ui/CropModal'
 import FeedbackModal from '../modals/FeedbackModal'
@@ -541,13 +541,22 @@ export default function Sidebar() {
                 </button>
               </>
             ) : (
-              <button
-                className="profile-menu-item"
-                onClick={async () => { try { await signInWithPopup(auth, googleProvider) } catch {} setShowMenu(false) }}
-              >
-                <span style={{ fontSize: 14 }}>🔑</span>
-                Sign in with Google
-              </button>
+              <>
+                <button
+                  className="profile-menu-item"
+                  onClick={async () => { try { await signInWithPopup(auth, googleProvider) } catch {} setShowMenu(false) }}
+                >
+                  <span style={{ fontSize: 14 }}>G</span>
+                  Sign in with Google
+                </button>
+                <button
+                  className="profile-menu-item"
+                  onClick={async () => { try { await signInWithPopup(auth, yahooProvider) } catch {} setShowMenu(false) }}
+                >
+                  <span style={{ fontSize: 14 }}>Y!</span>
+                  Sign in with Yahoo
+                </button>
+              </>
             )}
 
             <button className="profile-menu-item" onClick={() => { setShowFeedback(true); setShowMenu(false) }}>
