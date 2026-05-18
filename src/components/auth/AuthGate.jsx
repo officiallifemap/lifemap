@@ -280,7 +280,7 @@ function SignInScreen({ onSkip }) {
 
   if (view === 'choose') return card(
     <>
-      <div style={{ fontSize: 19, color: 'var(--cream)', fontWeight: 600, marginBottom: 6 }}>Welcome to Lifemap</div>
+      <div style={{ fontSize: 19, color: 'var(--cream)', fontWeight: 600, marginBottom: 6 }}>Welcome to lifemap</div>
       <div style={{ fontSize: 13, color: 'var(--text3)', lineHeight: 1.6, marginBottom: 24 }}>
         Sign in to sync your data across all your devices.
       </div>

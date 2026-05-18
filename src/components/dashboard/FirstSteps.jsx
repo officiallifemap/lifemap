@@ -28,7 +28,7 @@ export default function FirstSteps() {
     {
       id:    'event-or-goal',
       label: 'Add a life event or goal',
-      sub:   'The heart of Lifemap — something worth planning for',
+      sub:   'The heart of lifemap — something worth planning for',
       done:  events.length > 0 || goals.length > 0,
       go:    () => setPage('events'),
     },
@@ -104,7 +104,7 @@ export default function FirstSteps() {
             You're all set up
           </div>
           <div style={{ fontSize: 13, color: 'var(--text3)' }}>
-            Lifemap is ready. Everything's connected from here.
+            lifemap is ready. Everything's connected from here.
           </div>
         </div>
       ) : (
@@ -114,7 +114,7 @@ export default function FirstSteps() {
               Getting started
             </div>
             <div style={{ fontSize: 12, color: 'var(--text3)' }}>
-              Five things to make Lifemap feel like yours.
+              Five things to make lifemap feel like yours.
             </div>
           </div>
 
