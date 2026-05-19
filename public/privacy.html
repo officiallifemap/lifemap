@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — lifemap</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1a1f2e;
+      --navy2:  #1e2436;
+      --navy3:  #232a3b;
+      --gold:   #d4a84c;
+      --cream:  #f0e8d2;
+      --text1:  #e8e0cc;
+      --text2:  #a8a098;
+      --text3:  #6a6460;
+      --border: rgba(255,255,255,0.07);
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--text1);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.7;
+    }
+
+    header {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(26,31,46,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 60px;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px; color: var(--cream);
+      text-decoration: none;
+    }
+    .logo span { color: var(--gold); }
+
+    .back {
+      font-size: 13px; color: var(--text2);
+      text-decoration: none; transition: color .15s;
+    }
+    .back:hover { color: var(--text1); }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 24px 100px;
+    }
+
+    .eyebrow {
+      font-size: 11px; color: var(--gold);
+      letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 5vw, 48px);
+      color: var(--cream); font-weight: 400;
+      line-height: 1.15; margin-bottom: 12px;
+    }
+
+    .updated {
+      font-size: 12px; color: var(--text3);
+      margin-bottom: 52px;
+    }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px; color: var(--cream);
+      font-weight: 400; margin: 48px 0 14px;
+    }
+
+    p { font-size: 15px; color: var(--text2); margin-bottom: 14px; }
+
+    ul {
+      margin: 0 0 14px 0;
+      padding-left: 20px;
+    }
+    ul li {
+      font-size: 15px; color: var(--text2);
+      margin-bottom: 8px;
+    }
+
+    .highlight {
+      background: var(--navy3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin: 32px 0;
+    }
+    .highlight p { margin: 0; color: var(--text1); }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer .logo { font-size: 18px; }
+    footer span { font-size: 12px; color: var(--text3); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="logo">life<span>map</span></a>
+    <a href="/" class="back">← Back to lifemap</a>
+  </header>
+
+  <div class="container">
+
+    <div class="eyebrow">Legal</div>
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: May 2026</p>
+
+    <div class="highlight">
+      <p>The short version: we collect only what's needed to run the app. We never sell your data, never connect to your bank, and never show you ads. Your data is yours.</p>
+    </div>
+
+    <h2>What we collect</h2>
+    <p>When you create an account, we collect:</p>
+    <ul>
+      <li><strong>Email address</strong> — used to identify your account and send password reset emails if requested.</li>
+      <li><strong>Display name and profile photo</strong> — if provided via Google or Yahoo sign-in, or set by you directly.</li>
+    </ul>
+    <p>When you use lifemap, you may add personal information including goals, habits, financial figures, life events, to-do items, notes, wellness data, and details about people in your life. This is all <strong>user-generated content</strong> — we store it only to power the app for you.</p>
+
+    <h2>What we don't collect</h2>
+    <ul>
+      <li>We do <strong>not</strong> connect to your bank or any financial institution.</li>
+      <li>We do <strong>not</strong> use advertising trackers or analytics.</li>
+      <li>We do <strong>not</strong> sell, share, or monetize your personal data in any way.</li>
+      <li>We do <strong>not</strong> use AI to process or analyze your content.</li>
+      <li>Profile photos and event images you upload are stored <strong>locally on your device only</strong> and are never sent to our servers.</li>
+    </ul>
+
+    <h2>How your data is stored</h2>
+    <p>lifemap uses <strong>Firebase</strong> (by Google) for authentication and cloud storage. Your account data and app content are stored in Firebase Firestore, hosted on Google Cloud infrastructure in the United States.</p>
+    <p>Firebase's privacy practices are governed by Google's Privacy Policy: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">policies.google.com/privacy</a></p>
+    <p>If you use the app without creating an account, your data is stored <strong>only in your browser's local storage</strong> on your device and is never sent to any server.</p>
+
+    <h2>How we use your data</h2>
+    <ul>
+      <li>To sync your lifemap data across your devices when you're signed in.</li>
+      <li>To send password reset emails when you request them.</li>
+      <li>That's it.</li>
+    </ul>
+
+    <h2>Your rights</h2>
+    <p>You can:</p>
+    <ul>
+      <li><strong>Delete your data</strong> — use the "Clear all data" option in your profile settings, or contact us and we'll remove it from our servers within 30 days.</li>
+      <li><strong>Delete your account</strong> — contact us at <a href="mailto:officiallifemap@gmail.com">officiallifemap@gmail.com</a> and we'll delete your account and all associated data.</li>
+      <li><strong>Stop syncing</strong> — sign out and continue using the app locally at any time. Your local data remains on your device.</li>
+    </ul>
+
+    <h2>Children</h2>
+    <p>lifemap is not directed at children under 13. We do not knowingly collect personal information from children under 13.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>If we make meaningful changes to this policy, we'll update the date at the top of this page. We won't reduce your privacy rights without giving you a way to know.</p>
+
+    <h2>Contact</h2>
+    <p>Questions about privacy? Email us: <a href="mailto:officiallifemap@gmail.com">officiallifemap@gmail.com</a></p>
+
+    <hr />
+
+    <p style="font-size: 13px; color: var(--text3);">lifemap is an independent project. It is not affiliated with, endorsed by, or connected to any financial institution, health provider, or third-party service.</p>
+
+  </div>
+
+  <footer>
+    <a href="/" class="logo">life<span>map</span></a>
+    <span>© 2026 lifemap. All rights reserved.</span>
+  </footer>
+
+</body>
+</html>

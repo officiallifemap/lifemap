@@ -736,6 +736,10 @@ function LandingPage({ onSkip }) {
             onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text2)'}
             onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text3)'}
           >Contact</a>
+          <a href="/privacy.html" style={{ fontSize: 13, color: 'var(--text3)', textDecoration: 'none', transition: 'color .15s' }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text2)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text3)'}
+          >Privacy</a>
         </div>
       </footer>
 
