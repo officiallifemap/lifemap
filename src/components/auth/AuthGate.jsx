@@ -121,7 +121,7 @@ export default function AuthGate({ children }) {
   }
 
   if (!user && !skipped) {
-    return <SignInScreen onSkip={() => { localStorage.setItem(SKIP_KEY, '1'); setSkipped(true) }} />
+    return <LandingPage onSkip={() => { localStorage.setItem(SKIP_KEY, '1'); setSkipped(true) }} />
   }
 
   return (
@@ -150,7 +150,7 @@ const COUNTRIES = [
 /* ══════════════════════════════════════════
    Sign-in screen — all providers
 ══════════════════════════════════════════ */
-function SignInScreen({ onSkip }) {
+function SignInScreen({ onSkip, onBack }) {
   const [view,      setView]      = useState('choose')   // choose | email | phone | code | forgot
   const [emailMode, setEmailMode] = useState('signin')   // signin | signup
   const [email,     setEmail]     = useState('')
@@ -237,6 +237,20 @@ function SignInScreen({ onSkip }) {
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       padding: '32px 20px',
     }}>
+      {onBack && (
+        <button
+          onClick={onBack}
+          style={{
+            position: 'fixed', top: 16, left: 20,
+            background: 'none', border: 'none',
+            fontSize: 13, color: 'var(--text3)', cursor: 'pointer',
+            fontFamily: 'DM Sans, sans-serif', display: 'flex', alignItems: 'center', gap: 5,
+            transition: 'color .15s',
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text2)'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text3)'}
+        >← Back</button>
+      )}
       <div style={{ marginBottom: 36, textAlign: 'center' }}>
         <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: 42, color: 'var(--cream)', letterSpacing: -1, marginBottom: 4 }}>
           life<span style={{ color: 'var(--gold)' }}>map</span>
@@ -515,5 +529,198 @@ function YahooIcon() {
       <circle cx="16" cy="16" r="16" fill="#6001D2"/>
       <path d="M6 8h5.5l4.5 7 4.5-7H26l-7 10.5V28h-6V18.5z" fill="#fff"/>
     </svg>
+  )
+}
+
+/* ══════════════════════════════════════════
+   Landing Page
+══════════════════════════════════════════ */
+const FEATURES = [
+  { icon: '◎', title: 'Goals',        desc: 'Break big ambitions into milestones. Track progress and stay motivated without losing the thread.' },
+  { icon: '⟳', title: 'Habits',       desc: 'Build routines that actually stick. Daily streaks, weekly overviews, full history.' },
+  { icon: '◈', title: 'Finances',     desc: 'Budget, income, bills, and debt — clear and simple. No bank connections. Ever.' },
+  { icon: '◇', title: 'Life Events',  desc: 'Log the moments that shape you. Big and small, they all deserve a place.' },
+  { icon: '◯', title: 'People',       desc: 'Birthdays, anniversaries, gift ideas — remember what matters about the people you love.' },
+  { icon: '♡', title: 'Wellness',     desc: 'Check in with yourself. Mood, sleep, medications — all in one quiet corner.' },
+]
+
+function LandingPage({ onSkip }) {
+  const [showSignIn, setShowSignIn] = useState(false)
+
+  if (showSignIn) {
+    return <SignInScreen onSkip={onSkip} onBack={() => setShowSignIn(false)} />
+  }
+
+  return (
+    <div style={{ background: 'var(--navy)', minHeight: '100vh', color: 'var(--text1)', fontFamily: 'DM Sans, sans-serif' }}>
+
+      {/* ── Navbar ── */}
+      <header style={{
+        position: 'sticky', top: 0, zIndex: 10,
+        background: 'rgba(22,28,42,0.92)', backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid var(--border)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 32px', height: 60,
+      }}>
+        <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: 22, color: 'var(--cream)' }}>
+          life<span style={{ color: 'var(--gold)' }}>map</span>
+        </div>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <button
+            onClick={() => setShowSignIn(true)}
+            style={{ background: 'none', border: 'none', color: 'var(--text2)', fontSize: 14, cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', transition: 'color .15s' }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text1)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text2)'}
+          >Sign in</button>
+          <button className="btn btn-primary" onClick={() => setShowSignIn(true)} style={{ fontSize: 14, padding: '8px 18px' }}>
+            Get Started
+          </button>
+        </div>
+      </header>
+
+      {/* ── Hero ── */}
+      <section style={{ textAlign: 'center', padding: '100px 24px 80px', maxWidth: 720, margin: '0 auto' }}>
+        <div style={{ fontSize: 11, color: 'var(--gold)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: 24 }}>
+          your personal life planner
+        </div>
+        <h1 style={{
+          fontFamily: 'DM Serif Display, serif',
+          fontSize: 'clamp(42px, 7vw, 72px)',
+          color: 'var(--cream)', lineHeight: 1.1,
+          margin: '0 0 24px', fontWeight: 400,
+        }}>
+          Finally, one place<br />for all of it.
+        </h1>
+        <p style={{ fontSize: 17, color: 'var(--text2)', lineHeight: 1.8, maxWidth: 560, margin: '0 auto 44px' }}>
+          Goals, habits, finances, events, people — lifemap brings every corner of your life into one organized space, so nothing falls through the cracks.
+        </p>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button className="btn btn-primary" onClick={() => setShowSignIn(true)} style={{ fontSize: 15, padding: '13px 32px' }}>
+            Get Started Free
+          </button>
+          <button
+            onClick={onSkip}
+            style={{
+              background: 'none', border: '1px solid var(--border2)', borderRadius: 10,
+              color: 'var(--text2)', fontSize: 15, padding: '13px 28px',
+              cursor: 'pointer', fontFamily: 'DM Sans, sans-serif', transition: 'all .15s',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text1)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border2)'; e.currentTarget.style.color = 'var(--text2)' }}
+          >Try without an account →</button>
+        </div>
+      </section>
+
+      {/* ── Features ── */}
+      <section style={{ padding: '20px 24px 80px', maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: 'clamp(28px, 4vw, 42px)', color: 'var(--cream)', fontWeight: 400, margin: '0 0 12px' }}>
+            Everything you need. Nothing you don't.
+          </h2>
+          <p style={{ fontSize: 14, color: 'var(--text3)', maxWidth: 460, margin: '0 auto' }}>
+            Nine sections, all connected. Your dashboard pulls it together into a daily briefing every time you open the app.
+          </p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 14 }}>
+          {FEATURES.map((f) => (
+            <div key={f.title} style={{
+              background: 'var(--navy3)', border: '1px solid var(--border)',
+              borderRadius: 14, padding: '22px 22px',
+              display: 'flex', gap: 16, alignItems: 'flex-start',
+              transition: 'border-color .15s',
+            }}
+              onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--border2)'}
+              onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}
+            >
+              <div style={{
+                width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+                background: 'rgba(212,168,76,.08)', border: '1px solid rgba(212,168,76,.18)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 17, color: 'var(--gold)',
+              }}>{f.icon}</div>
+              <div>
+                <div style={{ fontSize: 14, color: 'var(--cream)', fontWeight: 600, marginBottom: 5 }}>{f.title}</div>
+                <div style={{ fontSize: 13, color: 'var(--text3)', lineHeight: 1.65 }}>{f.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Privacy ── */}
+      <section style={{ background: 'var(--navy3)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', padding: '70px 24px' }}>
+        <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: 32, marginBottom: 20 }}>🔒</div>
+          <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: 'clamp(24px, 3vw, 36px)', color: 'var(--cream)', fontWeight: 400, margin: '0 0 18px' }}>
+            Your data stays yours.
+          </h2>
+          <p style={{ fontSize: 15, color: 'var(--text2)', lineHeight: 1.85, marginBottom: 14 }}>
+            lifemap never connects to your bank, never sells your data, and never tracks you for ads. Everything you add is stored securely and synced across your devices — nothing more.
+          </p>
+          <p style={{ fontSize: 13, color: 'var(--text3)' }}>You can export or delete your data at any time.</p>
+        </div>
+      </section>
+
+      {/* ── How it works ── */}
+      <section style={{ padding: '80px 24px', maxWidth: 740, margin: '0 auto' }}>
+        <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: 'clamp(28px, 4vw, 42px)', color: 'var(--cream)', fontWeight: 400, textAlign: 'center', margin: '0 0 52px' }}>
+          Up and running in minutes.
+        </h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          {[
+            { n: '1', title: 'Create your free account',  desc: 'Sign up with email, Google, or Yahoo. No credit card. No trial period. No catch.' },
+            { n: '2', title: 'Add what matters to you',   desc: 'Start with a goal, a habit, or a bill — whatever\'s on your mind. Add as much or as little as you like.' },
+            { n: '3', title: 'Watch it come together',    desc: 'Your dashboard pulls everything into a daily briefing. Open the app, know your life.' },
+          ].map((s) => (
+            <div key={s.n} style={{ display: 'flex', gap: 22, alignItems: 'flex-start' }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: '50%', flexShrink: 0,
+                background: 'rgba(212,168,76,.1)', border: '1px solid rgba(212,168,76,.28)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: 'DM Serif Display, serif', fontSize: 19, color: 'var(--gold)',
+              }}>{s.n}</div>
+              <div style={{ paddingTop: 8 }}>
+                <div style={{ fontSize: 16, color: 'var(--cream)', fontWeight: 600, marginBottom: 6 }}>{s.title}</div>
+                <div style={{ fontSize: 14, color: 'var(--text3)', lineHeight: 1.7 }}>{s.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Final CTA ── */}
+      <section style={{ borderTop: '1px solid var(--border)', padding: '80px 24px', textAlign: 'center' }}>
+        <h2 style={{ fontFamily: 'DM Serif Display, serif', fontSize: 'clamp(28px, 4vw, 48px)', color: 'var(--cream)', fontWeight: 400, margin: '0 0 14px' }}>
+          Ready to map out your life?
+        </h2>
+        <p style={{ fontSize: 14, color: 'var(--text3)', marginBottom: 36 }}>Free forever. No credit card needed.</p>
+        <button className="btn btn-primary" onClick={() => setShowSignIn(true)} style={{ fontSize: 16, padding: '14px 42px' }}>
+          Get Started Free
+        </button>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer style={{
+        borderTop: '1px solid var(--border)', padding: '28px 32px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        flexWrap: 'wrap', gap: 14,
+      }}>
+        <div style={{ fontFamily: 'DM Serif Display, serif', fontSize: 18, color: 'var(--cream)' }}>
+          life<span style={{ color: 'var(--gold)' }}>map</span>
+          <span style={{ fontSize: 10, color: 'var(--text3)', marginLeft: 10, fontFamily: 'DM Sans, sans-serif', letterSpacing: 1.5, textTransform: 'uppercase' }}>Your life, organized</span>
+        </div>
+        <div style={{ display: 'flex', gap: 22, alignItems: 'center' }}>
+          <a href="https://ko-fi.com/lifemap" target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: 'var(--text3)', textDecoration: 'none', transition: 'color .15s' }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text2)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text3)'}
+          >☕ Ko-fi</a>
+          <a href="mailto:officiallifemap@gmail.com" style={{ fontSize: 13, color: 'var(--text3)', textDecoration: 'none', transition: 'color .15s' }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text2)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text3)'}
+          >Contact</a>
+        </div>
+      </footer>
+
+    </div>
   )
 }
