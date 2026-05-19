@@ -38,8 +38,9 @@ function friendlyError(code) {
   switch (code) {
     case 'auth/email-already-in-use':      return 'An account with this email already exists. Try signing in.'
     case 'auth/wrong-password':
-    case 'auth/invalid-credential':        return 'Incorrect email or password.'
+    case 'auth/invalid-credential':        return 'Incorrect email or password. If you previously signed in with Google or Yahoo, try that instead.'
     case 'auth/user-not-found':            return 'No account found with this email.'
+    case 'auth/account-exists-with-different-credential': return 'This email is already linked to a different sign-in method. Please use the method you originally signed up with.'
     case 'auth/weak-password':             return 'Password must be at least 6 characters.'
     case 'auth/invalid-email':             return 'Please enter a valid email address.'
     case 'auth/too-many-requests':         return 'Too many attempts. Please wait a moment and try again.'
@@ -174,7 +175,16 @@ function SignInScreen({ onSkip, onBack }) {
   const signInWith = async (provider) => {
     setLoading(true); setError('')
     try { await signInWithPopup(auth, provider) }
-    catch (e) { err(e) }
+    catch (e) {
+      if (e.code === 'auth/account-exists-with-different-credential') {
+        setError('This email is already registered with email & password. Sign in with that first — you can link Google/Yahoo from your account settings afterwards.')
+        setView('email')
+        setEmailMode('signin')
+        setLoading(false)
+      } else {
+        err(e)
+      }
+    }
   }
 
   /* ── Email ── */
@@ -362,6 +372,14 @@ function SignInScreen({ onSkip, onBack }) {
           </button>
         )}
       </div>
+      {emailMode === 'signin' && (
+        <div style={{ marginTop: 14, fontSize: 11, color: 'var(--text3)', textAlign: 'center', lineHeight: 1.6 }}>
+          Used Google or Yahoo to sign up?{' '}
+          <button onClick={() => go('choose')} style={{ background: 'none', border: 'none', color: 'var(--gold)', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+            Go back and use that instead.
+          </button>
+        </div>
+      )}
     </>
   )
 
